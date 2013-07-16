@@ -10,4 +10,4 @@ Spacejam.Camera.prototype = {
     transformation = transformation.multiply(translation);
     return transformation;
   }
-}
+};
