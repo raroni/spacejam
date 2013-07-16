@@ -4,7 +4,7 @@ function App() {
 
   this.canvas = this.renderer.canvas.element;
 
-  this.camera = new Spacejam.Camera(this.canvas.width, this.canvas.height, 1, 11);
+  this.camera = new Spacejam.Camera(this.canvas.width, this.canvas.height, -1, -11);
   this.camera.position.z = 4;
 }
 

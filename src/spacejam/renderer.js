@@ -53,7 +53,7 @@ Spacejam.Renderer.prototype = {
     var ndcVertex = new Spacejam.Vector3(
       clipSpaceVertex.x/clipSpaceVertex.w,
       clipSpaceVertex.y/clipSpaceVertex.w,
-      (clipSpaceVertex.z/clipSpaceVertex.w)*-1
+      clipSpaceVertex.z/clipSpaceVertex.w
     );
 
     // conversion should be made with matrix?
