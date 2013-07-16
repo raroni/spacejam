@@ -13,7 +13,6 @@ Spacejam.Renderer.prototype = {
     this.canvas.commit();
   },
   draw: function(scene, camera) {
-    this.camera = camera; // del me at some point! only added for debugging!
     this.worldViewProjection.push(camera.getTransformation());
     scene.models.forEach(this.drawModel.bind(this));
     this.worldViewProjection.pop();
@@ -25,8 +24,6 @@ Spacejam.Renderer.prototype = {
     var vertexA, vertexB, vertexC, face, pointA, pointB, pointC;
     var vertices = mesh.vertices;
     var color, colorBase;
-
-
 
     for(var i=0; mesh.faces.length>i; i++) {
       face = mesh.faces[i];
