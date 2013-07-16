@@ -19,7 +19,7 @@ Spacejam.Renderer.prototype = {
     this.worldViewProjection.pop();
   },
   drawModel: function(model) {
-    this.worldViewProjection.push(model.worldViewMatrix);
+    this.worldViewProjection.push(model.getTransformation());
 
     var mesh = model.mesh;
     var vertexA, vertexB, vertexC, face, pointA, pointB, pointC;

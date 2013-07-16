@@ -11,8 +11,12 @@ function App() {
 App.prototype = {
   start: function() {
     var mesh = new Spacejam.CubeMesh(2);
-    this.model = new Spacejam.Model(mesh);
-    this.scene.models.push(this.model);
+    this.cube1 = new Spacejam.Model(mesh);
+    var cube2 = new Spacejam.Model(mesh);
+    cube2.position.x = -2.4;
+    cube2.rotation.x = -2.4;
+
+    this.scene.models.push(this.cube1, cube2);
     this.scheduleNextTick();
   },
   setupRenderer: function() {
@@ -41,8 +45,9 @@ App.prototype = {
   update: function(timeDelta) {
     if(!this.x) this.x = 0;
     this.x += timeDelta;
-    var rotation = Spacejam.Matrix4.yRotation(this.x*0.0005+1).multiply(Spacejam.Matrix4.zRotation(this.x*0.001))
-    this.model.worldViewMatrix = Spacejam.Matrix4.translation(Math.sin(this.x*0.002)*1.4, 0, 0).multiply(rotation);
+    this.cube1.position.x = Math.sin(this.x*0.002)*0.4+1.5;
+    this.cube1.rotation.y = this.x*0.0005+1;
+    this.cube1.rotation.z = this.x*0.001;
 
     this.renderer.render(this.scene, this.camera);
   }

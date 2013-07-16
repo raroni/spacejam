@@ -84,24 +84,34 @@ Spacejam.Matrix4.identity = function() {
     0, 0, 0, 1
   );
   return identity;
-}
+};
 
-Spacejam.Matrix4.zRotation = function(angle) {
-  var zRotation = new Spacejam.Matrix4(
-    Math.cos(angle), Math.sin(angle), 0, 0,
-    -Math.sin(angle), Math.cos(angle), 0, 0,
-    0, 0, 1, 0,
+Spacejam.Matrix4.xRotation = function(angle) {
+  var rotation = new Spacejam.Matrix4(
+    1, 0, 0, 0,
+    0, Math.cos(angle), Math.sin(angle), 0,
+    0, -Math.sin(angle), Math.cos(angle), 0,
     0, 0, 0, 1
   );
-  return zRotation;
-}
+  return rotation;
+};
 
 Spacejam.Matrix4.yRotation = function(angle) {
-  var yRotation = new Spacejam.Matrix4(
+  var rotation = new Spacejam.Matrix4(
     Math.cos(angle), 0, -Math.sin(angle), 0,
     0, 1, 0, 0,
     Math.sin(angle), 0, Math.cos(angle), 0,
     0, 0, 0, 1
   );
-  return yRotation;
-}
+  return rotation;
+};
+
+Spacejam.Matrix4.zRotation = function(angle) {
+  var rotation = new Spacejam.Matrix4(
+    Math.cos(angle), Math.sin(angle), 0, 0,
+    -Math.sin(angle), Math.cos(angle), 0, 0,
+    0, 0, 1, 0,
+    0, 0, 0, 1
+  );
+  return rotation;
+};

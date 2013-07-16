@@ -14,3 +14,8 @@ Spacejam.Vector3.prototype = {
     return vector;
   }
 };
+
+Spacejam.Vector3.zero = function() {
+  var vector = new Spacejam.Vector3(0, 0, 0);
+  return vector;
+};
