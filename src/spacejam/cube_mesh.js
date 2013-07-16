@@ -1,4 +1,4 @@
-Spacejam.Cube = function(size) {
+Spacejam.CubeMesh = function(size) {
   Spacejam.Mesh.call(this);
 
   var halfSize = size/2;
@@ -26,4 +26,4 @@ Spacejam.Cube = function(size) {
   this.faces.push(new Spacejam.Face(4, 6, 7));
 };
 
-Spacejam.Cube.prototype = Object.create(Spacejam.Mesh);
+Spacejam.CubeMesh.prototype = Object.create(Spacejam.Mesh);

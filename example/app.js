@@ -10,8 +10,8 @@ function App() {
 
 App.prototype = {
   start: function() {
-    var cube = new Spacejam.Cube(2);
-    this.model = new Spacejam.Model(cube);
+    var mesh = new Spacejam.CubeMesh(2);
+    this.model = new Spacejam.Model(mesh);
     this.scene.models.push(this.model);
     this.scheduleNextTick();
   },
