@@ -1,11 +1,14 @@
 function App() {
+  this.width = 800;
+  this.height = 600;
+
   this.scene = new Spacejam.Scene();
+  this.camera = new Spacejam.Camera(this.width, this.height, -1, -11);
+  this.camera.position.z = 4;
+
   this.setupRenderer();
 
   this.canvas = this.renderer.canvas.element;
-
-  this.camera = new Spacejam.Camera(this.canvas.width, this.canvas.height, -1, -11);
-  this.camera.position.z = 4;
 }
 
 App.prototype = {
@@ -23,9 +26,11 @@ App.prototype = {
     var clearColor = new Spacejam.Color(0.4, 0, 0);
 
     var options = {
-      width: 800,
-      height: 600,
-      clearColor: clearColor
+      width: this.width,
+      height: this.height,
+      clearColor: clearColor,
+      scene: this.scene,
+      camera: this.camera
     };
 
     this.renderer = new Spacejam.Renderer(options);
@@ -40,7 +45,7 @@ App.prototype = {
     this.lastTickAt = timestamp;
 
     this.update(deltaTime);
-    this.scheduleNextTick();
+    //this.scheduleNextTick();
   },
   update: function(timeDelta) {
     if(!this.x) this.x = 0;

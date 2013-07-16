@@ -2,23 +2,25 @@ Spacejam.Renderer = function(options) {
   if(!options) throw new Error('Renderer needs options!');
   this.canvas = new Spacejam.Canvas(options.width, options.height);
   this.canvas.clearColor = options.clearColor;
-  this.worldViewProjection = new Spacejam.MatrixStack();
+  this.worldView = new Spacejam.MatrixStack();
   this.clearColor = options.clearColor;
+  this.scene = options.scene;
+  this.camera = options.camera;
 };
 
 Spacejam.Renderer.prototype = {
-  render: function(scene, camera) {
+  render: function() {
     this.canvas.clear();
-    this.draw(scene, camera);
+    this.draw();
     this.canvas.commit();
   },
-  draw: function(scene, camera) {
-    this.worldViewProjection.push(camera.getTransformation());
-    scene.models.forEach(this.drawModel.bind(this));
-    this.worldViewProjection.pop();
+  draw: function() {
+    this.worldView.push(this.camera.getWorldView());
+    this.scene.models.forEach(this.drawModel.bind(this));
+    this.worldView.pop();
   },
   drawModel: function(model) {
-    this.worldViewProjection.push(model.getTransformation());
+    this.worldView.push(model.getTransformation());
 
     var mesh = model.mesh;
     var vertexA, vertexB, vertexC, face, pointA, pointB, pointC;
@@ -41,11 +43,13 @@ Spacejam.Renderer.prototype = {
       */
       this.canvas.drawTriangle(pointA, pointB, pointC, color);
     }
-    this.worldViewProjection.pop();
+    this.worldView.pop();
   },
   project: function(vertex) {
     var homoVertex = new Spacejam.Vector4(vertex.x, vertex.y, vertex.z, 1);
-    var clipSpaceVertex = this.worldViewProjection.getCurrent().multiply(homoVertex);
+
+    var worldCoordinates = this.worldView.getCurrent().multiply(homoVertex);
+    var clipSpaceVertex = this.camera.projection.multiply(worldCoordinates);
 
     var ndcVertex = new Spacejam.Vector3(
       clipSpaceVertex.x/clipSpaceVertex.w,
