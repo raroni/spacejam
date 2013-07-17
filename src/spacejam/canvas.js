@@ -7,10 +7,9 @@ Spacejam.Canvas = function(width, height) {
   this.depthBuffer = new Array(this.element.width * this.element.height);
 
   this.clearColor = new Spacejam.Color(0, 0, 0);
-  /*
-  this.canvas.style.width = (width/devicePixelRatio) + 'px';
-  this.canvas.style.height = (height/devicePixelRatio) + 'px';
-  */
+
+  this.element.style.width = (width/devicePixelRatio) + 'px';
+  this.element.style.height = (height/devicePixelRatio) + 'px';
 };
 
 Spacejam.Canvas.prototype = {

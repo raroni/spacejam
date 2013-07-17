@@ -2,7 +2,7 @@ Spacejam.Renderer = function(options) {
   if(!options) throw new Error('Renderer needs options!');
   this.canvas = new Spacejam.Canvas(options.width, options.height);
   this.canvas.clearColor = options.clearColor;
-  this.worldView = new Spacejam.MatrixStack();
+  this.worldTransformation = new Spacejam.MatrixStack();
   this.clearColor = options.clearColor;
   this.scene = options.scene;
   this.camera = options.camera;
@@ -15,41 +15,71 @@ Spacejam.Renderer.prototype = {
     this.canvas.commit();
   },
   draw: function() {
-    this.worldView.push(this.camera.getWorldView());
     this.scene.models.forEach(this.drawModel.bind(this));
-    this.worldView.pop();
   },
   drawModel: function(model) {
-    this.worldView.push(model.getTransformation());
+    this.worldTransformation.push(model.getTransformation());
 
     var mesh = model.mesh;
-    var vertexA, vertexB, vertexC, face, pointA, pointB, pointC;
+    var face;
+    var homoCoordinatesA, homoCoordinatesB, homoCoordinatesC;
+    var worldCoordinatesA, worldCoordinatesB, worldCoordinatesC;
+    var projectedCoordinatesA, projectedCoordinatesB, projectedCoordinatesC;
     var vertices = mesh.vertices;
-    var color, colorBase;
 
     for(var i=0; mesh.faces.length>i; i++) {
       face = mesh.faces[i];
-      colorBase = 0.25+0.5*i/mesh.faces.length;
-      color = new Spacejam.Color(colorBase, colorBase, colorBase);
 
-      pointA = this.project(vertices[face.a]);
-      pointB = this.project(vertices[face.b]);
-      pointC = this.project(vertices[face.c]);
+      homoCoordinatesA = new Spacejam.Vector4(mesh.vertices[face.a].x, mesh.vertices[face.a].y, mesh.vertices[face.a].z, 1);
+      homoCoordinatesB = new Spacejam.Vector4(mesh.vertices[face.b].x, mesh.vertices[face.b].y, mesh.vertices[face.b].z, 1);
+      homoCoordinatesC = new Spacejam.Vector4(mesh.vertices[face.c].x, mesh.vertices[face.c].y, mesh.vertices[face.c].z, 1);
+
+      worldCoordinatesA = this.worldTransformation.getCurrent().multiply(homoCoordinatesA);
+      worldCoordinatesB = this.worldTransformation.getCurrent().multiply(homoCoordinatesB);
+      worldCoordinatesC = this.worldTransformation.getCurrent().multiply(homoCoordinatesC);
+
+      color = this.getColor(
+        model,
+        worldCoordinatesA.toVector3(),
+        worldCoordinatesB.toVector3(),
+        worldCoordinatesC.toVector3()
+      );
+
+      projectedCoordinatesA = this.project(worldCoordinatesA);
+      projectedCoordinatesB = this.project(worldCoordinatesB);
+      projectedCoordinatesC = this.project(worldCoordinatesC);
 
       /*
       this.canvas.drawLine(pointA, pointB);
       this.canvas.drawLine(pointB, pointC);
       this.canvas.drawLine(pointC, pointA);
       */
-      this.canvas.drawTriangle(pointA, pointB, pointC, color);
+      this.canvas.drawTriangle(
+        projectedCoordinatesA,
+        projectedCoordinatesB,
+        projectedCoordinatesC,
+        color
+      );
     }
-    this.worldView.pop();
+    this.worldTransformation.pop();
   },
-  project: function(vertex) {
-    var homoVertex = new Spacejam.Vector4(vertex.x, vertex.y, vertex.z, 1);
+  getColor: function(model, worldCoordinatesA, worldCoordinatesB, worldCoordinatesC) {
+    var planeVector1 = worldCoordinatesA.subtract(worldCoordinatesB);
+    var planeVector2 = worldCoordinatesA.subtract(worldCoordinatesC);
+    var normal = planeVector2.cross(planeVector1);
+    normal.normalize();
+    var center = worldCoordinatesA.add(worldCoordinatesB).add(worldCoordinatesC).divide(3);
+    var lightDirection = this.scene.light.position.subtract(center);
+    lightDirection.normalize();
+    var dotProduct = normal.dot(lightDirection);
+    var lightIntensity = Math.max(0, dotProduct);
 
-    var worldCoordinates = this.worldView.getCurrent().multiply(homoVertex);
-    var clipSpaceVertex = this.camera.projection.multiply(worldCoordinates);
+    var color = new Spacejam.Color(0, 0.5+0.5*lightIntensity, 0);
+    return color;
+  },
+  project: function(worldCoordinates) {
+    var eyeCoordinates = this.camera.getWorldView().multiply(worldCoordinates);
+    var clipSpaceVertex = this.camera.projection.multiply(eyeCoordinates);
 
     var ndcVertex = new Spacejam.Vector3(
       clipSpaceVertex.x/clipSpaceVertex.w,
