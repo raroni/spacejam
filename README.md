@@ -1,7 +1,7 @@
 Spacejam
 ========
 
-Spacejam is a very simple softwared based 3d rendering engine I made to improve my understanding of the OpenGL rendering pipeline. Basically, it renders 3d objects on a HTML canvas-element by calculating every single pixel's color. It makes heavy use of matrix transformations. It supports very basic lighting.
+Spacejam is a very simple softwared based 3d rendering engine I made to improve my understanding of computer 3d graphics and the math behind it. Basically, it renders 3d objects on a HTML canvas-element by calculating every single pixel's color. It makes heavy use of matrix transformations. It supports very basic lighting.
 
 Here's an example of what you can do:
 
@@ -36,3 +36,5 @@ Here's an example of what you can do:
     document.body.appendChild(this.renderer.canvas.element);
 
 See the [`example` dir](https://github.com/rasmusrn/spacejam/tree/master/example) for a complete example.
+
+You can see a demo [here](http://rasmusrn.github.io/spacejam/).
