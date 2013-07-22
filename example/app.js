@@ -17,7 +17,10 @@ App.prototype = {
   start: function() {
     var mesh = new Spacejam.CubeMesh(2);
     this.cube1 = new Spacejam.Model(mesh);
+    this.cube1.color = new Spacejam.Color(0, 1, 0);
+
     var cube2 = new Spacejam.Model(mesh);
+    cube2.color = new Spacejam.Color(0, 0, 1);
     cube2.position.x = -2.4;
     cube2.rotation.x = -2.4;
 

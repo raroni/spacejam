@@ -74,7 +74,7 @@ Spacejam.Renderer.prototype = {
     var dotProduct = normal.dot(lightDirection);
     var lightIntensity = Math.max(0, dotProduct);
 
-    var color = new Spacejam.Color(0, 0.5+0.5*lightIntensity, 0);
+    var color = model.color.multiply(0.5+lightIntensity*0.5);
     return color;
   },
   project: function(worldCoordinates) {
