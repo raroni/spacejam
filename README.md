@@ -23,9 +23,9 @@ Here's an example of what you can do:
     scene.models.push(cube1, cube2);
 
     var options = {
-      width: this.width,
-      height: this.height,
-      clearColor: clearColor,
+      width: 800,
+      height: 600,
+      clearColor: new Spacejam.Color(1, 0, 0), // red
       scene: scene,
       camera: camera
     };
